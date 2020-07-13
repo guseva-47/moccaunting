@@ -47,7 +47,12 @@ public class CategoryOutlayController {
 
     @PostMapping
     public CategoryOutlay create(@RequestBody CategoryOutlay category) {
-        var a = repo.save(category);
-        return a;
+        return repo.save(category);
+    }
+
+    @DeleteMapping("{id}")
+    public void delete(@PathVariable Long id) {
+        var toDelete = repo.findById(id).orElseThrow(NotFound::new);
+        repo.delete(toDelete);
     }
 }
