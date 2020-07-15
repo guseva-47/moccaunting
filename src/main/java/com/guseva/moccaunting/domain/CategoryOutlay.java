@@ -2,7 +2,7 @@ package com.guseva.moccaunting.domain;
 
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import org.springframework.lang.NonNull;
+//import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
 
@@ -18,7 +18,7 @@ public class CategoryOutlay {
     private String title;
     private Long expectedOutlay;
     private Long currentOutlay;
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Boolean isActive;
 
     public Long getId() {
@@ -53,11 +53,11 @@ public class CategoryOutlay {
         this.currentOutlay = currentOutlay;
     }
 
-    public Boolean getActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(Boolean active) {
+    public void setIsActive(Boolean active) {
         isActive = active;
     }
 }
