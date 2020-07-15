@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -47,6 +46,7 @@ public class CategoryOutlayController {
 
     @PostMapping
     public CategoryOutlay create(@RequestBody CategoryOutlay category) {
+        category.setIsActive(true);
         return repo.save(category);
     }
 

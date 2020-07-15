@@ -6,10 +6,10 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@Table(name="category_outlay")
+@Table(name="purse")
 @ToString
 @EqualsAndHashCode(of = {"id"})
-public class CategoryOutlay {
+public class Purse {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
