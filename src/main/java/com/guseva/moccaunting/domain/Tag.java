@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="tag")
@@ -16,6 +17,9 @@ public class Tag {
 
     @Column(nullable = false)
     private String title;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Operation> operations;
 
     public Long getId() {
         return id;
@@ -31,5 +35,13 @@ public class Tag {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(Set<Operation> operations) {
+        this.operations = operations;
     }
 }

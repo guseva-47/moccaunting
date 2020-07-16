@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name="source_money")
@@ -22,6 +23,9 @@ public class SourceMoney {
 
     @Column(columnDefinition = "boolean default true")
     private Boolean isActive;
+
+//    @OneToMany
+//    private Set<Operation> operations;
 
     public Long getId() {
         return id;
@@ -62,5 +66,13 @@ public class SourceMoney {
     public void setIsActive(Boolean active) {
         isActive = active;
     }
+
+//    public Set<Operation> getOperations() {
+//        return operations;
+//    }
+//
+//    public void setOperations(Set<Operation> operations) {
+//        this.operations = operations;
+//    }
 
 }
