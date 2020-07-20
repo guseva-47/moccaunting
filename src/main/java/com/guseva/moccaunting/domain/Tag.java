@@ -18,8 +18,8 @@ public class Tag {
     @Column(nullable = false)
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Operation> operations;
+//    @ManyToMany//(fetch = FetchType.LAZY)
+//    private Set<Operation> operations;
 
     public Long getId() {
         return id;
@@ -37,11 +37,11 @@ public class Tag {
         this.title = title;
     }
 
-    public Set<Operation> getOperations() {
-        return operations;
-    }
-
-    public void setOperations(Set<Operation> operations) {
-        this.operations = operations;
-    }
+//    public Set<Operation> getOperations() {
+//        return operations;
+//    }
+//
+//    public void setOperations(Set<Operation> operations) {
+//        this.operations = operations;
+//    }
 }
