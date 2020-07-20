@@ -32,7 +32,10 @@ public class Operation {
 
     Long moneyAmount;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Column(nullable = false)
     Date operationDate;
+
+    String comment;
 
     public Long getId() {
         return id;
@@ -97,4 +100,13 @@ public class Operation {
     public void setOperationDate(Date operationDate) {
         this.operationDate = operationDate;
     }
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
+
 }

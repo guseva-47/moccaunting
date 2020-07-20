@@ -70,6 +70,4 @@ public class OperationController {
         var toDelete = repo.findById(id).orElseThrow(NotFound::new);
         repo.delete(toDelete);
     }
-
-    // TODO сделать вывод определенных операций. все операции по категории... по тегу
 }

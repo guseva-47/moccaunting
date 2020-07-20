@@ -1,6 +1,5 @@
 package com.guseva.moccaunting.controller;
 
-import com.guseva.moccaunting.domain.CategoryOutlay;
 import com.guseva.moccaunting.domain.Operation;
 import com.guseva.moccaunting.domain.SourceMoney;
 import com.guseva.moccaunting.exception.NotFound;
