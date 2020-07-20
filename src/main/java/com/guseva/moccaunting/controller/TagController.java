@@ -34,10 +34,7 @@ public class TagController {
     }
     
     @PutMapping("{id}")
-    public Tag update(
-            @PathVariable Long id,
-            @RequestBody Tag tag
-    ) {
+    public Tag update(@PathVariable Long id, @RequestBody Tag tag) {
         Tag tagFromDB = tagRepo.findById(id).orElseThrow(NotFound::new);
         BeanUtils.copyProperties(tag, tagFromDB, "id");
         return tagRepo.save(tagFromDB);

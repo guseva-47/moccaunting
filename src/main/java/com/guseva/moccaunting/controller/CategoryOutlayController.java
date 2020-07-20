@@ -1,8 +1,11 @@
 package com.guseva.moccaunting.controller;
 
 import com.guseva.moccaunting.domain.CategoryOutlay;
+import com.guseva.moccaunting.domain.Operation;
+import com.guseva.moccaunting.domain.Tag;
 import com.guseva.moccaunting.exception.NotFound;
 import com.guseva.moccaunting.repo.CategoryOutlayRepo;
+import com.guseva.moccaunting.repo.OperationRepo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +16,12 @@ import java.util.List;
 @RequestMapping("category_outlay")
 public class CategoryOutlayController {
     private final CategoryOutlayRepo repo;
+    private final OperationRepo operRepo;
 
     @Autowired
-    public CategoryOutlayController(CategoryOutlayRepo repo) {
+    public CategoryOutlayController(CategoryOutlayRepo repo, OperationRepo operRepo) {
         this.repo = repo;
+        this.operRepo = operRepo;
     }
 
     @GetMapping
@@ -29,10 +34,11 @@ public class CategoryOutlayController {
         return repo.findById(id).orElseThrow(NotFound::new);
     }
 
-//    @GetMapping("{id}")
-//    public CategoryOutlay getOne(@PathVariable("id") CategoryOutlay categoryOutlay){
-//        return categoryOutlay;
-//    }
+    @GetMapping("{id}/operations")
+    public List<Operation> allOperations(@PathVariable Long id) {
+        CategoryOutlay categoryFromDB = repo.findById(id).orElseThrow(NotFound::new);
+        return operRepo.findAllByCategoryOutlay(categoryFromDB);
+    }
 
     @PutMapping("{id}")
     public CategoryOutlay update(
