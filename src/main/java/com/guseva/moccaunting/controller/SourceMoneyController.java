@@ -1,12 +1,11 @@
 package com.guseva.moccaunting.controller;
 
-import com.guseva.moccaunting.domain.Operation;
 import com.guseva.moccaunting.domain.SourceMoney;
-import com.guseva.moccaunting.exception.NotFound;
-import com.guseva.moccaunting.repo.OperationRepo;
-import com.guseva.moccaunting.repo.SourceMoneyRepo;
-import org.springframework.beans.BeanUtils;
+import com.guseva.moccaunting.dto.OperationPageDto;
+import com.guseva.moccaunting.service.SourceMoneyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,48 +13,43 @@ import java.util.List;
 @RestController
 @RequestMapping("source_money")
 public class SourceMoneyController {
-    private final SourceMoneyRepo repo;
-    private final OperationRepo operRepo;
+    private final SourceMoneyService sourceMoneyService;
 
     @Autowired
-    public SourceMoneyController(SourceMoneyRepo repo, OperationRepo operRepo) {
-        this.repo = repo;
-        this.operRepo = operRepo;
+    public SourceMoneyController(SourceMoneyService sourceMoneyService) {
+        this.sourceMoneyService = sourceMoneyService;
     }
 
     @GetMapping
     public List<SourceMoney> list() {
-        return repo.findAll();
+        return sourceMoneyService.list();
     }
 
     @GetMapping("{id}")
     public SourceMoney getOne(@PathVariable Long id){
-        return repo.findById(id).orElseThrow(NotFound::new);
+        return sourceMoneyService.getOne(id);
     }
 
     @GetMapping("{id}/operations")
-    public List<Operation> allOperations(@PathVariable Long id) {
-        SourceMoney sourceFromDB = repo.findById(id).orElseThrow(NotFound::new);
-        return operRepo.findAllBySourceMoney(sourceFromDB);
+    public OperationPageDto allOperations(
+            @PathVariable Long id,
+            @PageableDefault(size = OperationPageDto.PAGE_SIZE, sort = {"operationDate", "id"}) Pageable pageable
+    ) {
+        return sourceMoneyService.allOperations(id, pageable);
     }
-    
 
     @PutMapping("{id}")
     public SourceMoney update(@PathVariable Long id, @RequestBody SourceMoney source) {
-        SourceMoney sourceFromDB = repo.findById(id).orElseThrow(NotFound::new);
-        BeanUtils.copyProperties(source, sourceFromDB, "id");
-        return repo.save(sourceFromDB);
+        return sourceMoneyService.update(id, source);
     }
 
     @PostMapping
     public SourceMoney create(@RequestBody SourceMoney source) {
-        source.setIsActive(true);
-        return repo.save(source);
+        return sourceMoneyService.create(source);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable Long id) {
-        var toDelete = repo.findById(id).orElseThrow(NotFound::new);
-        repo.delete(toDelete);
+        sourceMoneyService.delete(id);
     }
 }

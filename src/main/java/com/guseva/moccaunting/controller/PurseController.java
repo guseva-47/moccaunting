@@ -1,12 +1,11 @@
 package com.guseva.moccaunting.controller;
 
-import com.guseva.moccaunting.domain.Operation;
 import com.guseva.moccaunting.domain.Purse;
-import com.guseva.moccaunting.exception.NotFound;
-import com.guseva.moccaunting.repo.OperationRepo;
-import com.guseva.moccaunting.repo.PurseRepo;
-import org.springframework.beans.BeanUtils;
+import com.guseva.moccaunting.dto.OperationPageDto;
+import com.guseva.moccaunting.service.PurceService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,47 +13,43 @@ import java.util.List;
 @RestController
 @RequestMapping("purse")
 public class PurseController {
-    private final PurseRepo repo;
-    private final OperationRepo operRepo;
 
+    private final PurceService purceService;
     @Autowired
-    public PurseController(PurseRepo repo, OperationRepo operRepo) {
-        this.repo = repo;
-        this.operRepo = operRepo;
+    public PurseController(PurceService purceService) {
+        this.purceService = purceService;
     }
 
     @GetMapping
     public List<Purse> list() {
-        return repo.findAll();
+        return purceService.list();
     }
 
     @GetMapping("{id}")
     public Purse getOne(@PathVariable Long id) {
-        return  repo.findById(id).orElseThrow(NotFound::new);
+        return purceService.getOne(id);
     }
 
     @GetMapping("{id}/operations")
-    public List<Operation> allOperations(@PathVariable Long id) {
-        Purse purseFromDB = repo.findById(id).orElseThrow(NotFound::new);
-        return operRepo.findAllByPurse(purseFromDB);
+    public OperationPageDto allOperations(
+            @PathVariable Long id,
+            @PageableDefault(size = OperationPageDto.PAGE_SIZE, sort = {"operationDate", "id"}) Pageable pageable
+    ) {
+        return purceService.allOperations(id, pageable);
     }
 
     @PutMapping("{id}")
     public Purse update(@PathVariable Long id, @RequestBody Purse purse) {
-        Purse purseFromDB = repo.findById(id).orElseThrow(NotFound::new);
-        BeanUtils.copyProperties(purse, purseFromDB, "id");
-        return repo.save(purseFromDB);
+        return purceService.update(id, purse);
     }
 
     @PostMapping
     public Purse create(@RequestBody Purse purse) {
-        purse.setIsActive(true);
-        return repo.save(purse);
+        return purceService.create(purse);
     }
 
     @DeleteMapping("{id}")
     public void delete(@PathVariable Long id) {
-        var toDelete = repo.findById(id).orElseThrow(NotFound::new);
-        repo.delete(toDelete);
+        purceService.delete(id);
     }
 }
