@@ -25,7 +25,6 @@ public class PurceService {
         this.operRepo = operRepo;
     }
 
-    // todo
     public List<Purse> list() {
         return purseRepo.findAll();
     }

@@ -23,7 +23,6 @@ public class SourceMoneyService {
         this.operRepo = operRepo;
     }
 
-    // todo
     public List<SourceMoney> list() {
         return sourceMoneyRepo.findAll();
     }
@@ -32,7 +31,6 @@ public class SourceMoneyService {
         return sourceMoneyRepo.findById(id).orElseThrow(NotFound::new);
     }
 
-    //todo
     public OperationPageDto allOperations(Long id, Pageable pageable) {
         SourceMoney sourceMoneyFromDB = sourceMoneyRepo.findById(id).orElseThrow(NotFound::new);
 
