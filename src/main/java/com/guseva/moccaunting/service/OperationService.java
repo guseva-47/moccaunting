@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -64,6 +65,9 @@ public class OperationService {
         }
         if (!isGoodRequest)
             throw new BadRequest();
+
+        //todo
+        // if(op.getOperationDate() == null) op.setOperationDate((String) LocalDate.now(LocalDate));
 
         return operRepo.save(op);
     }
