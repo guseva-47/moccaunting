@@ -11,17 +11,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Objects;
 
 @Service
 public class OperationService {
     private final OperationRepo operRepo;
+    private final PeriodService periodService;
 
     @Autowired
-    public OperationService(OperationRepo operRepo) {
+    public OperationService(OperationRepo operRepo, PeriodService periodService) {
         this.operRepo = operRepo;
+        this.periodService = periodService;
     }
 
     // Постраничный вывод операций
@@ -40,13 +41,17 @@ public class OperationService {
 
     public Operation update(Long id, Operation operation) {
         Operation operationFromDB = operRepo.findById(id).orElseThrow(NotFound::new);
+
+        periodService.deleteOperation(operationFromDB);
         BeanUtils.copyProperties(operation, operationFromDB, "id");
+
+        periodService.addOperation(operationFromDB);
         return operRepo.save(operationFromDB);
     }
 
     public Operation create(Operation op) {
         // Возможны операции:
-        //                       -> источник(sourceMoney)
+        //      TODO                 -> источник(sourceMoney)
         // источник(sourceMoney) -> кошелек(purse)
         // кошелек(purse)        -> категория трат(categoryOutlay)
         // кошелек(purse)        -> кошелек(purseSponsor)
@@ -67,13 +72,15 @@ public class OperationService {
             throw new BadRequest();
 
         //todo
-        // if(op.getOperationDate() == null) op.setOperationDate((String) LocalDate.now(LocalDate));
+        // if(op.getOperationDate() == null) op.setOperationDate((String) LocalDate.now());
 
+        periodService.addOperation(op);
         return operRepo.save(op);
     }
 
     public void delete(Long id) {
         var toDelete = operRepo.findById(id).orElseThrow(NotFound::new);
+        periodService.deleteOperation(toDelete);
         operRepo.delete(toDelete);
     }
 }

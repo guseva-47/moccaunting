@@ -12,16 +12,16 @@ import java.util.HashMap;
 @Controller
 @RequestMapping("/")
 public class MainController {
-//    @GetMapping
-//    public String main(
-//            Model model,
-//            @AuthenticationPrincipal User user
-//    ){
-//        HashMap<Object, Object> data = new HashMap<>();
-//
-//        data.put("profile", user);
-//
-//        model.addAttribute("frontendData", data);
-//        return "index";
-//    }
+    @GetMapping
+    public String main(
+            Model model,
+            @AuthenticationPrincipal User user
+    ){
+        HashMap<Object, Object> data = new HashMap<>();
+
+        data.put("profile", user);
+
+        model.addAttribute("frontendData", data);
+        return "index";
+    }
 }

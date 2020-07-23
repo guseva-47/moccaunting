@@ -1,8 +1,10 @@
 package com.guseva.moccaunting.controller;
 
 import com.guseva.moccaunting.domain.CategoryOutlay;
+import com.guseva.moccaunting.domain.Period;
 import com.guseva.moccaunting.dto.OperationPageDto;
 import com.guseva.moccaunting.service.CategoryOutlayService;
+import com.guseva.moccaunting.service.PeriodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -14,10 +16,12 @@ import java.util.List;
 @RequestMapping("category_outlay")
 public class CategoryOutlayController {
     private final CategoryOutlayService categoryOutlayService;
+    private final PeriodService periodService;
 
     @Autowired
-    public CategoryOutlayController(CategoryOutlayService categoryOutlayService) {
+    public CategoryOutlayController(CategoryOutlayService categoryOutlayService, PeriodService periodService) {
         this.categoryOutlayService = categoryOutlayService;
+        this.periodService = periodService;
     }
 
     @GetMapping
@@ -52,4 +56,11 @@ public class CategoryOutlayController {
     public void delete(@PathVariable Long id) {
         categoryOutlayService.delete(id);
     }
+
+    @GetMapping("/{id}/statistic")
+    public List<List<String>> getStatistic(@PathVariable Long id) {
+        var c = categoryOutlayService.getOne(id);
+        return periodService.getAllStatistics(c);
+    }
+
 }
